@@ -7,8 +7,10 @@ Created on Fri Jul 16 16:45:35 2021
 
 import pandas as pd
 import sklearn
+import pickle
 from tqdm import tqdm
-data=pd.read_csv('Tdata.csv')
+data=pd.read_csv('data.csv')
+
 
 
 data=data.rename(columns={'MONATSZAHL':"Category", 'AUSPRAEGUNG':'Accident_type', 'JAHR':"Year", 'MONAT':"Month", 'WERT':'Value'})
@@ -29,5 +31,8 @@ scaler.transform(data[feature_scale])
 trainData = pd.concat([data['Value'].reset_index(drop=True),
                     pd.DataFrame(scaler.transform(data[feature_scale]), columns=feature_scale)],
                     axis=1)
+
+scalerfile = 'scaler.sav'
+pickle.dump(scaler, open(scalerfile, 'wb'))
 
 trainData.to_csv('Tdata.csv')
